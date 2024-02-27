@@ -5,6 +5,8 @@ const defaultParams: RuntimeParams = {
   VIEW_FPS: 42,
   // 4fps
   CAPTURE_FPS: 250,
+
+  BOSS: false,
 };
 
 export default defaultParams;

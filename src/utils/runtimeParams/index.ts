@@ -9,6 +9,13 @@ function getFpsParam(paramName: string) {
   return Math.floor(1000 / parseInt(paramValue));
 }
 
+function getBooleanParam(paramName: string) {
+  const paramValue = urlParams.searchParams.get(paramName);
+
+  if (!paramValue) return undefined;
+  return paramValue === 'true';
+}
+
 function applyDefaults(parsedParams: Partial<RuntimeParams>): RuntimeParams {
   const result = Object.fromEntries(
     Object.entries(defaultParams).map(([key, value]) => [
@@ -23,6 +30,7 @@ function applyDefaults(parsedParams: Partial<RuntimeParams>): RuntimeParams {
 const runtimeParams = applyDefaults({
   CAPTURE_FPS: getFpsParam('cap_fps'),
   VIEW_FPS: getFpsParam('fps'),
+  BOSS: getBooleanParam('boss'),
 });
 
 export default runtimeParams;

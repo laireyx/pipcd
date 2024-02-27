@@ -1,4 +1,4 @@
-import { BuffName } from '@commonTypes/buffs';
+import { BuffName, Buffs } from '@commonTypes/buffs';
 import CooldownIndicator from '@components/CooldownIndicator';
 import useCooldownStore from '@stores/cooldown';
 import pipElements from '@utils/pipElements';
@@ -43,9 +43,14 @@ export default function PipContent() {
   return (
     <>
       <div ref={containerRef} className={pipContent}>
-        {Object.keys(activationLog).map((buffName) => (
-          <CooldownIndicator key={buffName} buffName={buffName as BuffName} />
-        ))}
+        {Object.keys(activationLog)
+          .filter(
+            (buffName) =>
+              Buffs[buffName as BuffName].boss || !runtimeParams.BOSS,
+          )
+          .map((buffName) => (
+            <CooldownIndicator key={buffName} buffName={buffName as BuffName} />
+          ))}
       </div>
     </>
   );

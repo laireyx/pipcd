@@ -47,8 +47,6 @@ export function useDetector() {
     const handler = setInterval(() => {
       const result = detector.detectBuffIcon();
 
-      console.log('handler');
-
       for (const { key, matchCount } of result) {
         switch (key) {
           case 'continuous':
