@@ -1,47 +1,51 @@
-import continous from '../assets/icons/continuous.png';
+import continuous from '../assets/icons/continuous.png';
 import fatalStrike from '../assets/icons/fatal-strike.png';
+import blink from '../assets/icons/blink.png';
 
 import erdaShower from '../assets/icons/erda-shower.png';
 import solJanus from '../assets/icons/sol-janus.png';
 
-type BuffImpl = {
-  name: string;
+interface Buff {
   url: string;
   cooldown: number;
   detectAll: boolean;
-};
+  cdr: boolean;
+}
 
-const Buffs = [
-  {
-    name: 'continuous',
-    url: continous,
+const Buffs = {
+  continuous: {
+    url: continuous,
     cooldown: 12,
     detectAll: true,
+    cdr: false,
   },
-  {
-    name: 'fatalStrike',
+  fatalStrike: {
     url: fatalStrike,
     cooldown: 30,
     detectAll: false,
+    cdr: false,
   },
-  {
-    name: 'erdaShower',
+  blink: {
+    url: blink,
+    cooldown: 20,
+    detectAll: false,
+    cdr: true,
+  },
+  erdaShower: {
     url: erdaShower,
     cooldown: 60,
     detectAll: false,
+    cdr: true,
   },
-  {
-    name: 'solJanus',
+  solJanus: {
     url: solJanus,
     cooldown: 60,
     detectAll: false,
+    cdr: true,
   },
-] as const satisfies BuffImpl[];
+} as const satisfies Record<string, Buff>;
 
-type BuffName = (typeof Buffs)[number]['name'];
-interface Buff extends BuffImpl {
-  name: BuffName;
-}
+type BuffName = keyof typeof Buffs;
 
 export type { Buff, BuffName };
 export { Buffs };

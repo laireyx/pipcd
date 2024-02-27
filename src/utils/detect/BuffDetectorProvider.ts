@@ -12,7 +12,9 @@ import { useTemplate } from '@hooks/useTemplate';
 import runtimeParams from '@utils/runtimeParams';
 
 import BuffDetector from './BuffDetector';
-import useCooldownStore from '@store/cooldown';
+import useCooldownStore from '@stores/cooldown';
+
+import { clearInterval, setInterval } from 'worker-timers';
 
 const DetectorContext = createContext<BuffDetector | null>(null);
 
@@ -42,10 +44,10 @@ export function useDetector() {
   useEffect(() => {
     if (!isCapturing) return;
 
-    let running = true;
-
-    const handler = () => {
+    const handler = setInterval(() => {
       const result = detector.detectBuffIcon();
+
+      console.log('handler');
 
       for (const { key, matchCount } of result) {
         switch (key) {
@@ -57,16 +59,10 @@ export function useDetector() {
             break;
         }
       }
+    }, runtimeParams.CAPTURE_FPS);
 
-      if (running) setTimeout(handler, runtimeParams.CAPTURE_FPS);
-    };
-
-    handler();
-
-    return () => {
-      running = false;
-    };
-  }, [detector, isCapturing]);
+    return () => clearInterval(handler);
+  }, [detector, isCapturing, activate]);
 
   return startDetect;
 }

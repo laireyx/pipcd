@@ -23,9 +23,8 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@hooks/*": ["./src/hooks/*"],
-      "@store/*": ["./src/store/*"],
-      "@theme": ["./src/theme/index.ts"],
-      "@theme/*": ["./src/theme/*"],
+      "@stores/*": ["./src/stores/*"],
+      "@styles/*": ["./src/styles/*"],
       "@utils/*": ["./src/utils/*"],
       "@commonTypes/*": ["./src/commonTypes/*"]
     }

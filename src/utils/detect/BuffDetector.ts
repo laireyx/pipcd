@@ -3,10 +3,10 @@ import cv from '@techstark/opencv-js';
 import Capture from './Capture';
 import type { Buff, BuffName } from '@commonTypes/buffs';
 
-type DetectTemplate = {
+interface DetectTemplate {
   template: cv.Mat;
   detectAll: boolean;
-};
+}
 
 type DetectResult = {
   key: BuffName;
@@ -14,7 +14,7 @@ type DetectResult = {
 }[];
 
 export default class BuffDetector {
-  private templates: Map<BuffName, DetectTemplate> = new Map();
+  private templates = new Map<BuffName, DetectTemplate>();
 
   capture = new Capture();
   threshold = 0.7;
@@ -23,7 +23,7 @@ export default class BuffDetector {
     return this.capture.initialize();
   }
 
-  async loadBuffIcon({ name, url, detectAll }: Buff) {
+  async loadBuffIcon(name: BuffName, { url, detectAll }: Buff) {
     function loadImage(url: string) {
       const img = new Image();
 
@@ -60,20 +60,21 @@ export default class BuffDetector {
   detectBuffIcon(): DetectResult {
     const shot = this.capture.takeCapture();
 
-    let detectResult: DetectResult = [];
-    let src: cv.Mat | null = shot.roi(
+    const detectResult: DetectResult = [];
+    const src: cv.Mat | null = shot.roi(
       new cv.Rect((shot.cols * 2) / 3, 0, shot.cols / 3, 32 * 5),
     );
 
     for (const [key, { template, detectAll }] of this.templates.entries()) {
       const result = new cv.Mat();
-      cv.matchTemplate(src, template, result, cv.TM_CCOEFF_NORMED);
+      cv.matchTemplate(src, template, result, cv.TM_CCOEFF_NORMED as number);
 
       let matchCount = 0;
 
       let { maxVal, maxLoc } = cv.minMaxLoc(result);
 
       while (maxVal > this.threshold) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         result.floatPtr(maxLoc.y, maxLoc.x)[0] = 0;
         matchCount++;
 

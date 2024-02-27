@@ -7,7 +7,7 @@ export default class Capture {
   private _captureMatrix: cv.Mat | null = null;
 
   private get videoSettings() {
-    const [primaryVideoTrack] = this.captureStream?.getVideoTracks() || [];
+    const [primaryVideoTrack] = this.captureStream?.getVideoTracks() ?? [];
 
     if (!primaryVideoTrack) throw new Error(`Cannot retrieve video track`);
     return primaryVideoTrack.getSettings();
@@ -53,7 +53,7 @@ export default class Capture {
     this.videoSource.height = height;
 
     this.videoSource.srcObject = this.captureStream;
-    this.videoSource.play();
+    await this.videoSource.play();
 
     this.videoCapture = new cv.VideoCapture(this.videoSource);
   }
