@@ -55,7 +55,22 @@ export default class Capture {
     this.videoSource.srcObject = this.captureStream;
     await this.videoSource.play();
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const _oldGetContext = HTMLCanvasElement.prototype.getContext;
+
+    // hook `HTMLCanvasElement.prototype.getContext()` to force apply { willReadFrequently: true }.
+    HTMLCanvasElement.prototype.getContext = function (
+      this: HTMLCanvasElement,
+    ) {
+      return _oldGetContext.call(this, '2d', {
+        willReadFrequently: true,
+      });
+    } as typeof HTMLCanvasElement.prototype.getContext;
+
     this.videoCapture = new cv.VideoCapture(this.videoSource);
+
+    // restore `HTMLCanvasElement.prototype.getContext()`
+    HTMLCanvasElement.prototype.getContext = _oldGetContext;
   }
 
   takeCapture() {
