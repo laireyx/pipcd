@@ -17,7 +17,7 @@ export default class BuffDetector {
   private templates = new Map<BuffName, DetectTemplate>();
 
   capture = new Capture();
-  threshold = 0.7;
+  threshold = 0.67;
 
   startCapture() {
     return this.capture.initialize();
@@ -62,7 +62,7 @@ export default class BuffDetector {
 
     const detectResult: DetectResult = [];
     const src: cv.Mat | null = shot.roi(
-      new cv.Rect((shot.cols * 2) / 3, 0, shot.cols / 3, 32 * 5),
+      new cv.Rect((shot.cols * 2) / 3, 24, shot.cols / 3, 32 * 5),
     );
 
     const candidates = [...this.templates.entries()].filter(
