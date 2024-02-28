@@ -57,7 +57,7 @@ export default class BuffDetector {
     });
   }
 
-  detectBuffIcon(): DetectResult {
+  detectBuffIcon(disabledBuffs: BuffName[]): DetectResult {
     const shot = this.capture.takeCapture();
 
     const detectResult: DetectResult = [];
@@ -65,7 +65,13 @@ export default class BuffDetector {
       new cv.Rect((shot.cols * 2) / 3, 0, shot.cols / 3, 32 * 5),
     );
 
-    for (const [key, { template, detectAll }] of this.templates.entries()) {
+    const candidates = [...this.templates.entries()].filter(
+      ([key]) => !disabledBuffs.includes(key),
+    );
+
+    for (const [key, { template, detectAll }] of candidates) {
+      if (disabledBuffs.includes(key)) continue;
+
       const result = new cv.Mat();
       cv.matchTemplate(src, template, result, cv.TM_CCOEFF_NORMED as number);
 

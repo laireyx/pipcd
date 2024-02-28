@@ -15,6 +15,7 @@ import BuffDetector from './BuffDetector';
 import useCooldownStore from '@stores/cooldown';
 
 import { clearInterval, setInterval } from 'worker-timers';
+import validBuffNames from '@utils/mode/validBuffNames';
 
 const DetectorContext = createContext<BuffDetector | null>(null);
 
@@ -45,7 +46,10 @@ export function useDetector() {
     if (!isCapturing) return;
 
     const handler = setInterval(() => {
-      const result = detector.detectBuffIcon();
+      const disabledBuffs = validBuffNames().filter(
+        (buffName) => useCooldownStore.getState().nextReady(buffName) > 0,
+      );
+      const result = detector.detectBuffIcon(disabledBuffs);
 
       for (const { key, matchCount } of result) {
         switch (key) {
