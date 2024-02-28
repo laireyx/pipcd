@@ -1,17 +1,20 @@
 import Button from '@components/Button';
 import CdrInput from '@components/CdrInput';
 import { useDetector } from '@utils/detect/BuffDetectorProvider';
-import pipElements from '@utils/pipElements';
+import pipCanvas from '@utils/pipCanvas';
 import { useCallback } from 'react';
 import { buttonPanel, controller, title } from './index.css';
 import useCooldownStore from '@stores/cooldown';
+import usePip from '@hooks/usePip';
 
 export default function Controller() {
   const startDetect = useDetector();
-  const togglePip = useCallback(() => void pipElements.togglePip(), []);
+  const togglePip = useCallback(() => void pipCanvas.togglePip(), []);
 
   const { percentCdr, fixedCdr, setPercentCdr, setFixedCdr } =
     useCooldownStore();
+
+  usePip();
 
   return (
     <div className={controller}>

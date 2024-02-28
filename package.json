@@ -15,7 +15,6 @@
     "@techstark/opencv-js": "^4.9.0-release.2",
     "@vanilla-extract/css": "^1.14.1",
     "@vanilla-extract/sprinkles": "^1.6.1",
-    "html2canvas": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "worker-timers": "^7.1.2",
